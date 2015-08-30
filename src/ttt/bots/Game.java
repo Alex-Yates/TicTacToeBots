@@ -19,6 +19,9 @@ public class Game {
     private int _crossPlayerScore = 0;
     private int _noughtPlayerScore = 0;
     private int _totalLegalMoves;
+    private int _totalFailedMoves;
+    private int _totalCrossWins;
+    private int _totalNoughtWins;
     private int _gameState;
     private iPlayer _currentPlayer;// = _crossPlayer;
     private Random _random = new Random();
@@ -26,6 +29,21 @@ public class Game {
     public int getTotalLegalMoves()
     {
         return _totalLegalMoves;
+    }
+    
+    public int getTotalFailedMoves()
+    {
+        return _totalFailedMoves;
+    }
+        
+    public int getTotalCrossWins()
+    {
+        return _totalCrossWins;
+    }
+            
+    public int getTotalNoughtWins()
+    {
+        return _totalNoughtWins;
     }
     
     private void nextPlayer() {
@@ -43,14 +61,16 @@ public class Game {
         // Checking the square is between 0 and 8 
         if (square > 8 || square < 0) 
         {
-            System.out.println("Square " + square + " does not exist! Must be 0-8.");
+            //System.out.println("Square " + square + " does not exist! Must be 0-8.");
+            _totalFailedMoves++;
             return false;
         }
 
         // Checking the square is empty
         if ((_gameState & TTT.getMask(square)) != TTT.getEmpty(square)) 
         {
-            System.out.println("Square " + square + " is not empty!");
+            //System.out.println("Square " + square + " is not empty!");
+            _totalFailedMoves++;
             return false;
         }
 
@@ -64,9 +84,12 @@ public class Game {
         {
             for (int i = 0; i < 8; i++)
             {
-                if ((TTT.getNoughtVictory(i) & _gameState) == 0)
+                if ((TTT.getCrossVictory(i) & _gameState) == 0)
                 {
-                    System.out.println("Noughts have won!");
+                    System.out.println("Crosses have won!");
+                    Utils.printBoard(_gameState);
+                    System.out.println(Utils.toString(_gameState));
+                    _totalCrossWins++;
                     return true;
                 }
             }
@@ -80,6 +103,10 @@ public class Game {
                 if ((TTT.getNoughtVictory(i) & _gameState) == 0)
                 {
                     System.out.println("Noughts have won!");
+                    Utils.printBoard(_gameState);
+                    System.out.println(Utils.toString(_gameState));
+                    _totalNoughtWins++;
+                    
                     return true;
                 }
             }
@@ -109,7 +136,7 @@ public class Game {
     private void playMove(iPlayer bot) 
     {
         int square = _currentPlayer.takeTurn(_gameState);
-        System.out.println(" I am chosing square " + square);
+        //System.out.println(" I am chosing square " + square);
         if (isValidMove(square)) 
         {
             _gameState &= ~TTT.getMask(square);
@@ -130,7 +157,7 @@ public class Game {
     private void playLastMove(iPlayer bot) 
     {
         int square = _currentPlayer.takeTurn(_gameState);
-        System.out.println(" I am chosing square " + square);
+        //System.out.println(" I am chosing square " + square);
         if (isValidMove(square)) 
         {
             _gameState &= ~TTT.getMask(square);

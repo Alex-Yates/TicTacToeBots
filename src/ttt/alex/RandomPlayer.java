@@ -5,12 +5,17 @@
  */
 package ttt.alex;
 
-import ttt.bots.TTT;
-import ttt.bots.Utils;
+import java.util.Random;
+import ttt.bots.iPlayer;
 
 /**
  *
  * @author Alex
  */
-public class test1 {
+public class RandomPlayer implements iPlayer {
+    final private Random _random = new Random();
+    
+    public int takeTurn (int board){
+    return _random.nextInt(10);
+    }
 }

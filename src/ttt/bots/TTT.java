@@ -16,6 +16,9 @@ public class TTT
     static public final int CROSS = 2;
     static public final int EMPTY = 1;
     
+    static public final int NOUGHT_MATCH = 3;
+    public final static int CROSS_MATCH = 5;
+    
     static public final int NOUGHT0 = 4<<29;
     static public final int NOUGHT1 = 4<<26;
     static public final int NOUGHT2 = 4<<23;
@@ -56,12 +59,51 @@ public class TTT
     static public final int MASK7 = 7<<8;
     static public final int MASK8 = 7<<5;
     
+    public final static int CROSS_MATCH_0 = CROSS_MATCH << 29;
+    public final static int CROSS_MATCH_1 = CROSS_MATCH << 26;
+    public final static int CROSS_MATCH_2 = CROSS_MATCH << 23;
+    public final static int CROSS_MATCH_3 = CROSS_MATCH << 20;
+    public final static int CROSS_MATCH_4 = CROSS_MATCH << 17;
+    public final static int CROSS_MATCH_5 = CROSS_MATCH << 14;
+    public final static int CROSS_MATCH_6 = CROSS_MATCH << 11;
+    public final static int CROSS_MATCH_7 = CROSS_MATCH << 8;
+    public final static int CROSS_MATCH_8 = CROSS_MATCH << 5;
+    
+    public final static int NOUGHT_MATCH_0 = NOUGHT_MATCH << 29;
+    public final static int NOUGHT_MATCH_1 = NOUGHT_MATCH << 26;
+    public final static int NOUGHT_MATCH_2 = NOUGHT_MATCH << 23;
+    public final static int NOUGHT_MATCH_3 = NOUGHT_MATCH << 20;
+    public final static int NOUGHT_MATCH_4 = NOUGHT_MATCH << 17;
+    public final static int NOUGHT_MATCH_5 = NOUGHT_MATCH << 14;
+    public final static int NOUGHT_MATCH_6 = NOUGHT_MATCH << 11;
+    public final static int NOUGHT_MATCH_7 = NOUGHT_MATCH << 8;
+    public final static int NOUGHT_MATCH_8 = NOUGHT_MATCH << 5;
+    
     static public final int TESTBOARD1 = NOUGHT4 + NOUGHT3 + NOUGHT5 + CROSS0 + CROSS1 + EMPTY2 + EMPTY6 + EMPTY7 + EMPTY8;
+    static public final int NEWBOARD = EMPTY0 + EMPTY1 + EMPTY2 + EMPTY3 + EMPTY4 + EMPTY5 + EMPTY6 + EMPTY7 + EMPTY8;
     
     private static final int[] _noughts = {NOUGHT0, NOUGHT1, NOUGHT2, NOUGHT3, NOUGHT4, NOUGHT5, NOUGHT6, NOUGHT7, NOUGHT8};
     private static final int[] _crosses = {CROSS0, CROSS1, CROSS2, CROSS3, CROSS4, CROSS5, CROSS6, CROSS7, CROSS8}; 
     private static final int[] _empties = {EMPTY0, EMPTY1, EMPTY2, EMPTY3, EMPTY4, EMPTY5, EMPTY6, EMPTY7, EMPTY8};
     private static final int[] _masks = {MASK0, MASK1, MASK2, MASK3, MASK4, MASK5, MASK6, MASK7, MASK8};
+      
+    private static final int[] CROSS_VICTORIES = { CROSS_MATCH_0 + CROSS_MATCH_1 + CROSS_MATCH_2,
+                                                   CROSS_MATCH_3 + CROSS_MATCH_4 + CROSS_MATCH_5,
+                                                   CROSS_MATCH_6 + CROSS_MATCH_7 + CROSS_MATCH_8,
+                                                   CROSS_MATCH_0 + CROSS_MATCH_3 + CROSS_MATCH_6,
+                                                   CROSS_MATCH_1 + CROSS_MATCH_4 + CROSS_MATCH_7,
+                                                   CROSS_MATCH_2 + CROSS_MATCH_5 + CROSS_MATCH_8,
+                                                   CROSS_MATCH_0 + CROSS_MATCH_4 + CROSS_MATCH_8,
+                                                   CROSS_MATCH_2 + CROSS_MATCH_4 + CROSS_MATCH_6};
+    
+    private static final int[] NOUGHT_VICTORIES = { NOUGHT_MATCH_0 + NOUGHT_MATCH_1 + NOUGHT_MATCH_2,
+                                                    NOUGHT_MATCH_3 + NOUGHT_MATCH_4 + NOUGHT_MATCH_5,
+                                                    NOUGHT_MATCH_6 + NOUGHT_MATCH_7 + NOUGHT_MATCH_8,
+                                                    NOUGHT_MATCH_0 + NOUGHT_MATCH_3 + NOUGHT_MATCH_6,
+                                                    NOUGHT_MATCH_1 + NOUGHT_MATCH_4 + NOUGHT_MATCH_7,
+                                                    NOUGHT_MATCH_2 + NOUGHT_MATCH_5 + NOUGHT_MATCH_8,
+                                                    NOUGHT_MATCH_0 + NOUGHT_MATCH_4 + NOUGHT_MATCH_8,
+                                                    NOUGHT_MATCH_2 + NOUGHT_MATCH_4 + NOUGHT_MATCH_6};
     
     public static int getNought(int square)
     {
@@ -76,6 +118,21 @@ public class TTT
     public static int getEmpty(int square)
     {
        return _empties[square];
+    }
+    
+    public static int getMask(int square)
+    {
+       return _masks[square];
+    }
+    
+    public static int getCrossVictory(int vcNumber)
+    {
+       return CROSS_VICTORIES[vcNumber];
+    }
+    
+    public static int getNoughtVictory(int vcNumber)
+    {
+       return NOUGHT_VICTORIES[vcNumber];
     }
     
     public static String getSquare(int square, int board)

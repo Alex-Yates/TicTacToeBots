@@ -18,7 +18,7 @@ public class Generation {
     // member variuables to hold all our bots
     private List<GeneBot> _contestants = new ArrayList<>();
     private List<GeneBot> _winners = new ArrayList<>();
-    Game _game = new Game();
+
     
     // constructors
     public Generation()
@@ -36,20 +36,38 @@ public class Generation {
     
     private List<GeneBot> runGeneration()
     {
-        for (int i = 0; i < _contestants.size(); i++)
+        Game game = new Game();
+        for (int i = 0; i < _contestants.size(); i+=2)
         {
             iPlayer crossPlayer = _contestants.get(i);
-            i++;
-            iPlayer noughtPlayer = _contestants.get(i);
+            iPlayer noughtPlayer = _contestants.get(i+1);
         
-            iPlayer winner = _game.playGame(crossPlayer, noughtPlayer);
+            iPlayer winner = game.playGame(crossPlayer, noughtPlayer);
             _winners.add((GeneBot)winner);
         }
-        System.out.println("Total legal moves: " + _game.getTotalLegalMoves());
-        System.out.println("Total failed moves: " + _game.getTotalFailedMoves());
-        System.out.println("Total Cross wins: " + _game.getTotalCrossWins());
-        System.out.println("Total Nought wins: " + _game.getTotalNoughtWins());
+        System.out.println("Total legal moves: " + game.getTotalLegalMoves());
+        System.out.println("Total failed moves: " + game.getTotalFailedMoves());
+        System.out.println("Total Cross wins: " + game.getTotalCrossWins());
+        System.out.println("Total Nought wins: " + game.getTotalNoughtWins());
+        System.out.println("Total number of winners: " + _winners.size());
+        System.out.println("Total number of winners: " + _contestants.size());
+        System.out.println("*************");
         return _winners;
+    }
+    
+    public void regenerate()
+    {
+        List<GeneBot> children = new ArrayList<>();
+        
+            for (int i = 0; i < _winners.size(); i+=2)
+            {
+                children.add(new GeneBot(_winners.get(i), _winners.get(i+1)));
+                children.add(new GeneBot(_winners.get(i), _winners.get(i+1)));
+             }
+            _contestants.clear();
+            _contestants.addAll(_winners);
+            _contestants.addAll(children);
+            _winners.clear();    
     }
     
     public static void main(String[] args)
@@ -57,6 +75,11 @@ public class Generation {
         Generation g = new Generation();
   
         g.runGeneration();
+        for (int i = 0; i < 50; i++)
+        {
+            g.regenerate();
+            g.runGeneration();
+        }
     }
     
 }

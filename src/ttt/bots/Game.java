@@ -5,7 +5,6 @@
  */
 package ttt.bots;
 
-import ttt.alex.RandomPlayer;
 
 /**
  *
@@ -13,8 +12,8 @@ import ttt.alex.RandomPlayer;
  */
 public class Game {
 
-    private iPlayer _crossPlayer = new RandomPlayer();
-    private iPlayer _noughtPlayer = new RandomPlayer();
+    private iPlayer _crossPlayer = new GeneBot();
+    private iPlayer _noughtPlayer = new GeneBot();
     private int _gameState = TTT.NEWBOARD;
     private iPlayer _currentPlayer = _crossPlayer;
 

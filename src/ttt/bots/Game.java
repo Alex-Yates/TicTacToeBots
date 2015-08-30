@@ -56,8 +56,11 @@ public class Game {
     private void playMove(iPlayer bot) 
     {
         int square = _currentPlayer.takeTurn(_gameState);
+        System.out.println(" I am chosing square " + square);
         if (isValidMove(square)) 
         {
+            _gameState &= ~TTT.getMask(square);
+            
             if (_currentPlayer == _crossPlayer) 
             {
                 _gameState = (_gameState + TTT.getCross(square));
@@ -74,6 +77,10 @@ public class Game {
         for (int i = 0; i < 9; i++) 
         {
             playMove(_currentPlayer);
+            
+            Utils.printBoard(_gameState);
+            System.out.println(Utils.toString(_gameState));
+            
             if (gameEnd()) 
             {
                 break;
@@ -81,6 +88,13 @@ public class Game {
             nextPlayer();
         }
 
+    }
+    
+    public static void main(String[] args)
+    {
+        Game g = new Game();
+  
+        g.playGame();
     }
 
 }

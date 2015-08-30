@@ -69,6 +69,14 @@ public class GeneBot implements iPlayer {
         }
     }
 
+    public int countOnes() {
+        int numOnes = 0;
+        for (Integer rule : _rules) {
+            numOnes += Integer.bitCount(rule);
+        }
+        return numOnes;
+    }
+
     public static void main(String[] args) {
         GeneBot parent1 = new GeneBot();
         GeneBot parent2 = new GeneBot();

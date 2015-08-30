@@ -45,7 +45,10 @@ public class Generation {
             iPlayer winner = _game.playGame(crossPlayer, noughtPlayer);
             _winners.add((GeneBot)winner);
         }
-        System.out.println(_game.getTotalLegalMoves());
+        System.out.println("Total legal moves: " + _game.getTotalLegalMoves());
+        System.out.println("Total failed moves: " + _game.getTotalFailedMoves());
+        System.out.println("Total Cross wins: " + _game.getTotalCrossWins());
+        System.out.println("Total Nought wins: " + _game.getTotalNoughtWins());
         return _winners;
     }
     

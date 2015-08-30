@@ -57,6 +57,7 @@ public class TTT
     static public final int MASK8 = 7<<5;
     
     static public final int TESTBOARD1 = NOUGHT4 + NOUGHT3 + NOUGHT5 + CROSS0 + CROSS1 + EMPTY2 + EMPTY6 + EMPTY7 + EMPTY8;
+    static public final int NEWBOARD = EMPTY0 + EMPTY1 + EMPTY2 + EMPTY3 + EMPTY4 + EMPTY5 + EMPTY6 + EMPTY7 + EMPTY8;
     
     private static final int[] _noughts = {NOUGHT0, NOUGHT1, NOUGHT2, NOUGHT3, NOUGHT4, NOUGHT5, NOUGHT6, NOUGHT7, NOUGHT8};
     private static final int[] _crosses = {CROSS0, CROSS1, CROSS2, CROSS3, CROSS4, CROSS5, CROSS6, CROSS7, CROSS8}; 
@@ -76,6 +77,11 @@ public class TTT
     public static int getEmpty(int square)
     {
        return _empties[square];
+    }
+    
+    public static int getMask(int square)
+    {
+       return _masks[square];
     }
     
     public static String getSquare(int square, int board)

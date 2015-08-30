@@ -49,7 +49,22 @@ public class Game {
     }
 
     private boolean gameEnd() {
-        // todo: make this logic work!
+        for (int i = 0; i < 8; i++)
+        {
+            if ((TTT.getCrossVictory(i) & _gameState) == 0)
+            {
+                System.out.println("Crosses have won!");
+                return true;
+            }
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            if ((TTT.getNoughtVictory(i) & _gameState) == 0)
+            {
+                System.out.println("Noughts have won!");
+                return true;
+            }
+        }
         return false;
     }
 

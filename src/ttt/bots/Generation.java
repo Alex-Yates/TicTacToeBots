@@ -75,8 +75,9 @@ public class Generation {
         Generation g = new Generation();
   
         g.runGeneration();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 5000; i++)
         {
+            System.out.println("Generation number: " + i);
             g.regenerate();
             g.runGeneration();
         }

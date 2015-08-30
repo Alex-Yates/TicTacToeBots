@@ -12,68 +12,66 @@ import ttt.alex.RandomPlayer;
  * @author Alex
  */
 public class Game {
+
     private iPlayer _crossPlayer = new RandomPlayer();
     private iPlayer _noughtPlayer = new RandomPlayer();
     private int _gameState = TTT.NEWBOARD;
     private iPlayer _currentPlayer = _crossPlayer;
-    
-    private void nextPlayer()
-    {
-        if (_currentPlayer == _crossPlayer)
-        {
+
+    private void nextPlayer() {
+        if (_currentPlayer == _crossPlayer) {
             _currentPlayer = _noughtPlayer;
-        }
-        else
-        {
+        } else {
             _currentPlayer = _crossPlayer;
         }
     }
-    
-    private boolean isValidMove(int square)
-    {
+
+    private boolean isValidMove(int square) {
         // Checking the square is between 0 and 8 
-        if (square > 8 || square < 0)
-        {
+        if (square > 8 || square < 0) {
             System.out.println("Square " + square + " does notr exist! Must be 0-8.");
             return false;
         }
-        
+
         // Checking the square is empty
-        if ((_gameState & TTT.getMask(square)) != TTT.getEmpty(square))
-        {
+        if ((_gameState & TTT.getMask(square)) != TTT.getEmpty(square)) {
             System.out.println("Square " + square + " is not empty!");
             return false;
         }
-        
+
         // If neither of the above are true the move is legal
         return true;
     }
-    
-    private boolean gameEnd()
-    {
+
+    private boolean gameEnd() {
         // todo: make this logic work!
         return false;
     }
-    
-    private void playMove(iPlayer bot)
-    {
+
+    private void playMove(iPlayer bot) {
         int square = _currentPlayer.takeTurn(_gameState);
-        // if square.isValid()
-        
-    }
-    
-    private void playGame()
-    {
-        for (int i = 0; i <9; i++)
+        if (isValidMove(square)) 
         {
-            playMove(_currentPlayer);
-            if (gameEnd())
+            if (_currentPlayer == _crossPlayer) 
             {
+                _gameState = (_gameState + TTT.getCross(square));
+            }
+            else
+            {
+                _gameState = (_gameState + TTT.getNought(square));
+            }     
+        }
+    }
+
+    private void playGame() {
+        for (int i = 0; i < 9; i++) {
+            playMove(_currentPlayer);
+            if (gameEnd()) {
                 break;
             }
             nextPlayer();
         }
 
     }
-    
+
 }

@@ -52,7 +52,7 @@ public class Game {
     private boolean gameEnd()
     {
         // todo: make this logic work!
-        return true;
+        return false;
     }
     
     private void playMove(iPlayer bot)

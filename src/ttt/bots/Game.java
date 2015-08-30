@@ -23,6 +23,11 @@ public class Game {
     private iPlayer _currentPlayer;// = _crossPlayer;
     private Random _random = new Random();
 
+    public int getTotalLegalMoves()
+    {
+        return _totalLegalMoves;
+    }
+    
     private void nextPlayer() {
         if (_currentPlayer == _crossPlayer) 
         {
@@ -142,7 +147,7 @@ public class Game {
     }
 
 
-    private iPlayer playGame(iPlayer crossPlayer, iPlayer noughtPlayer) 
+    public iPlayer playGame(iPlayer crossPlayer, iPlayer noughtPlayer) 
     {
         _gameState = TTT.NEWBOARD;
         _crossPlayer = crossPlayer;
@@ -154,28 +159,28 @@ public class Game {
         
         // first turn
         playMove(crossPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));
         
         // second turn
         playMove(noughtPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));        
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));        
         
         // third turn
         playMove(crossPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));
         
         // fourth turn
         playMove(noughtPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));        
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));        
         
         // fifth turn
         playMove(crossPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));
         if (crossWin())
         {
             return crossPlayer;
@@ -183,8 +188,8 @@ public class Game {
         
         // sixth turn
         playMove(noughtPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));        
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));        
         if (noughtWin())
         {
             return noughtPlayer;
@@ -192,8 +197,8 @@ public class Game {
         
         // seventh turn
         playMove(crossPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));
         if (crossWin())
         {
             return crossPlayer;
@@ -201,8 +206,8 @@ public class Game {
         
         // eigth turn
         playMove(noughtPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));        
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));        
         if (noughtWin())
         {
             return noughtPlayer;
@@ -210,8 +215,8 @@ public class Game {
         
         // ninth turn
         playLastMove(crossPlayer);
-        Utils.printBoard(_gameState);
-        System.out.println(Utils.toString(_gameState));
+        // Utils.printBoard(_gameState);
+        // System.out.println(Utils.toString(_gameState));
         if (crossWin())
         {
             return crossPlayer;

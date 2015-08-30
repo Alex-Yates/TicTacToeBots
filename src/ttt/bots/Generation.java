@@ -50,7 +50,7 @@ public class Generation {
         System.out.println("Total Cross wins: " + game.getTotalCrossWins());
         System.out.println("Total Nought wins: " + game.getTotalNoughtWins());
         System.out.println("Total number of winners: " + _winners.size());
-        System.out.println("Total number of winners: " + _contestants.size());
+        System.out.println("Total number of contestants: " + _contestants.size());
         System.out.println("*************");
         return _winners;
     }

@@ -8,7 +8,7 @@ public class GeneBot implements iPlayer
 {
 
     private static final int NUM_RULES = 2000;
-    private static final float MUT_PROB = 0.005f;
+    private static final float MUT_PROB = 0.0005f;
 
     private List<Integer>  _rules;
 

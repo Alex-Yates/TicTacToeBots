@@ -19,22 +19,27 @@ public class Game {
     private iPlayer _currentPlayer = _crossPlayer;
 
     private void nextPlayer() {
-        if (_currentPlayer == _crossPlayer) {
+        if (_currentPlayer == _crossPlayer) 
+        {
             _currentPlayer = _noughtPlayer;
-        } else {
+        } 
+        else 
+        {
             _currentPlayer = _crossPlayer;
         }
     }
 
     private boolean isValidMove(int square) {
         // Checking the square is between 0 and 8 
-        if (square > 8 || square < 0) {
+        if (square > 8 || square < 0) 
+        {
             System.out.println("Square " + square + " does notr exist! Must be 0-8.");
             return false;
         }
 
         // Checking the square is empty
-        if ((_gameState & TTT.getMask(square)) != TTT.getEmpty(square)) {
+        if ((_gameState & TTT.getMask(square)) != TTT.getEmpty(square)) 
+        {
             System.out.println("Square " + square + " is not empty!");
             return false;
         }
@@ -48,7 +53,8 @@ public class Game {
         return false;
     }
 
-    private void playMove(iPlayer bot) {
+    private void playMove(iPlayer bot) 
+    {
         int square = _currentPlayer.takeTurn(_gameState);
         if (isValidMove(square)) 
         {
@@ -63,10 +69,13 @@ public class Game {
         }
     }
 
-    private void playGame() {
-        for (int i = 0; i < 9; i++) {
+    private void playGame() 
+    {
+        for (int i = 0; i < 9; i++) 
+        {
             playMove(_currentPlayer);
-            if (gameEnd()) {
+            if (gameEnd()) 
+            {
                 break;
             }
             nextPlayer();

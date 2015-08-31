@@ -28,6 +28,14 @@ public class Generation {
             _contestants.add(new GeneBot());
         }
     }
+
+    public Generation(int num_rules, float mut_prob)
+    {
+        for (int i = 0; i < 2000; i++)
+        {
+            _contestants.add(new GeneBot(num_rules, mut_prob));
+        }
+    }
     
     public Generation(Set<GeneBot> bots)
     {
@@ -72,7 +80,7 @@ public class Generation {
     
     public static void main(String[] args)
     {
-        Generation g = new Generation();
+        Generation g = new Generation(500, 0.005f);
   
         g.runGeneration();
         for (int i = 0; i < 5000; i++)

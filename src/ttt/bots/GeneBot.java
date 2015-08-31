@@ -7,16 +7,26 @@ import java.util.Random;
 public class GeneBot implements iPlayer
 {
 
-    private static final int NUM_RULES = 2000;
-    private static final float MUT_PROB = 0.0005f;
+    private int _num_rules = 2000;
+    private float _mut_prob = 0.0005f;
 
     private List<Integer>  _rules;
 
     public GeneBot()
     {
-        _rules = new ArrayList<Integer>(NUM_RULES);
+        _rules = new ArrayList<Integer>(_num_rules);
         Random rand = new Random();
-        for (int i = 0; i < NUM_RULES; i++)
+        for (int i = 0; i < _num_rules; i++)
+            _rules.add(rand.nextInt());
+    }
+    
+    public GeneBot(int num_rules, float mut_prob)
+    {
+        _num_rules = num_rules;
+        _mut_prob = mut_prob;
+        _rules = new ArrayList<Integer>(_num_rules);
+        Random rand = new Random();
+        for (int i = 0; i < _num_rules; i++)
             _rules.add(rand.nextInt());
     }
 
@@ -27,10 +37,22 @@ public class GeneBot implements iPlayer
 
     public GeneBot(GeneBot mother, GeneBot father)
     {
+        // children should have the same number of genes
+        // as the parent with the least genes
+        _num_rules = mother.getNumRules();
+        if (father.getNumRules() < _num_rules)
+        {
+            _num_rules = father.getNumRules();
+        }
+        
+        // children inherit mutation probability from mother
+        _mut_prob = mother.getMutProb();
+        
+        // children inherit randomly from mother an father
         Random rand = new Random();
-        _rules = new ArrayList<Integer>(NUM_RULES);
+        _rules = new ArrayList<Integer>(_num_rules);
 
-        for (int i = 0; i < NUM_RULES; i++)
+        for (int i = 0; i < _num_rules; i++)
         {
             if (rand.nextBoolean())
                 _rules.add(mother.getRule(i));
@@ -38,18 +60,28 @@ public class GeneBot implements iPlayer
                 _rules.add(father.getRule(i));
         }
 
-        for (int i = 0; i < NUM_RULES; i++)
+        for (int i = 0; i < _num_rules; i++)
         {
             int mutation = 0;
             for (int j = 0; j < 32; j++)
             {
-                if (rand.nextFloat() < MUT_PROB)
+                if (rand.nextFloat() < _mut_prob)
                     mutation = mutation + (1 << i);
             }
             _rules.set(i, _rules.get(i) ^ mutation);
         }
     }
 
+    public int getNumRules()
+    {
+        return _num_rules;
+    }
+    
+    public float getMutProb()
+    {
+        return _mut_prob;
+    }
+    
     private boolean ruleMatch(int board, int rule)
     {
         return (rule & board & 0xFFFFFFE0) == 0;

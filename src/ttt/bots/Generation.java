@@ -7,9 +7,11 @@ package ttt.bots;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +67,7 @@ public class Generation {
             _winners.add((GeneBot)winner);
         }
         
-        // logging stats
+        // logging stats        
         saveStats(game.getTotalLegalMoves(), game.getTotalFailedMoves(),
                   game.getTotalCrossWins(), game.getTotalNoughtWins(),
                   _winners.size(), _contestants.size(), logFilePath);
@@ -74,36 +76,16 @@ public class Generation {
     }
     
     private void runMultiRoundTournament(int rounds, String logFilePath)
-    {
-        // creating a .csv file to log results to
+    {    
         try
 	{
-	    FileWriter writer = new FileWriter(logFilePath);
-            
-            writer.append("Total legal moves");
-	    writer.append(',');
-	    writer.append("Total failed moves");
-            writer.append(',');
-	    writer.append("Legal move rate");	    
-            writer.append(',');
-	    writer.append("Total Cross wins");
-            writer.append(',');
-	    writer.append("Total Nought wins");
-            writer.append(',');
-	    writer.append("Total number of winners");
-            writer.append(',');
-	    writer.append("Total number of contestants");
-            writer.append('\n');
-            
-            writer.flush();
-	    writer.close();
+            Files.write(Paths.get(logFilePath), "\n".getBytes(), StandardOpenOption.APPEND);
         }    
 	catch(IOException e)
 	{
 	     e.printStackTrace();
 	}
-        
-        
+
         // run multiple generations, killing the weakest
         // 50% each time
         for (int r = 0; r < rounds; r++)
@@ -163,27 +145,52 @@ public class Generation {
         System.out.println("Total number of contestants: " + totalContestants);
         System.out.println("*************");
         
-               // creating a .csv file to log results to
+        // determining the string to add to the file:
+        String stats = ',' + Integer.toString(legalMoves) + ',' 
+                     + Integer.toString(failedMoves) + ','
+                     + Double.toString(hitRate) + ','
+                     + Integer.toString(totalCrossWins) + ','
+                     + Integer.toString(totalNoughtWins) + ','
+                     + Integer.toString(totalWinners) + ','
+                     + Integer.toString(totalContestants) + ',';
+        
+        // appending a .csv file with stats
         try
 	{
-	    FileWriter writer = new FileWriter(logFilePath);
-            
-            writer.append('\n');
-            writer.append(Integer.toString(legalMoves));
-	    writer.append(',');
-	    writer.append(Integer.toString(failedMoves));
-            writer.append(',');
-	    writer.append(Double.toString(hitRate));	    
-            writer.append(',');
-	    writer.append(Integer.toString(totalCrossWins));
-            writer.append(',');
-	    writer.append(Integer.toString(totalNoughtWins));
-            writer.append(',');
-	    writer.append(Integer.toString(totalWinners));
-            writer.append(',');
-	    writer.append(Integer.toString(totalContestants));
-
-            
+            Files.write(Paths.get(logFilePath), stats.getBytes(), StandardOpenOption.APPEND);
+        }    
+	catch(IOException e)
+	{
+	     e.printStackTrace();
+	}
+    }
+    
+    public static void createLogFile(String path, int rounds)
+    {     
+        // creating a .csv file to log results to
+        try
+	{            
+            FileWriter writer = new FileWriter(path);
+            for (int i = 0; i < rounds; i++)
+            {
+                writer.append("Round " + i);
+                writer.append(',');
+                writer.append("Total legal moves");
+                writer.append(',');
+                writer.append("Total failed moves");
+                writer.append(',');
+                writer.append("Legal move rate");	    
+                writer.append(',');
+                writer.append("Total Cross wins");
+                writer.append(',');
+                writer.append("Total Nought wins");
+                writer.append(',');
+                writer.append("Total number of winners");
+                writer.append(',');
+                writer.append("Total number of contestants");
+                writer.append(',');
+            }
+            writer.append("\n");
             writer.flush();
 	    writer.close();
         }    
@@ -195,13 +202,18 @@ public class Generation {
     
     public static void main(String[] args)
     {
-        Generation g = new Generation(500, 0.05f);
-        String logFile = new SimpleDateFormat("'C:\\Users\\Alex\\Documents\\TicTacToeLogs'yyyyMMddhhmmss'.csv'").format(new Date());
+        Generation g = new Generation(500, 0.05f);    
+        int numRounds = 5;
+        
+        // setting ther file path and file name for the log file
+        String logFile = new SimpleDateFormat("'C:\\Users\\Alex\\Documents\\TicTacToeBotLogs'yyyyMMddhhmmss'.csv'").format(new Date());
+        
+        createLogFile(logFile, numRounds);
  
         for (int i = 0; i < 5000; i++)
         {
         System.out.println("Tournament number: " + i);
-        g.runMultiRoundTournament(5, logFile);
+        g.runMultiRoundTournament(numRounds, logFile);
         }
 
     }

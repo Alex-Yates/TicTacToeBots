@@ -5,28 +5,29 @@
  */
 package ttt.bots;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 /**
- *
- * @author Alex
+ * Handles lifecycles of generations of bots as compete in tournaments,
+ * die and regenerate
+ * @author Alex Yates
  */
 public class Generation {
     
-    // member variuables to hold all our bots
+    // member variables to hold all our bots
+ 
+    // A list of all competing bots
     private List<GeneBot> _contestants = new ArrayList<>();
+    // A list reserved only for winning bots
     private List<GeneBot> _winners = new ArrayList<>();
     
     // constructors
+    /**
+     * Creates a new generation with 2000 randomly created bots with default 
+     * numbers of genes and mutation rates
+     */
     public Generation()
     {
         for (int i = 0; i < 2000; i++)
@@ -35,6 +36,12 @@ public class Generation {
         }
     }
 
+    /**
+     * Creates a new generation with 2000 randomly created bots with 
+     * configurable mutation rates and numbers of genes
+     * @param num_rules The number of genes each bot should have
+     * @param mut_prob The mutation rate each both should have
+     */
     public Generation(int num_rules, float mut_prob)
     {
         for (int i = 0; i < 2000; i++)
@@ -43,12 +50,22 @@ public class Generation {
         }
     }
     
+    /**
+     * Creates a new generation from an existing set of GeneBots
+     * @param bots a set of GeneBots
+     */
     public Generation(Set<GeneBot> bots)
     {
         _contestants.addAll(bots);
     }
     
-    private List<GeneBot> runTournament(String logFilePath)
+    /**
+     * Pairs bots from _contestants off against each other and makes each pair
+     * play a game. Adds the winners to _winners. Also logs various stats.
+     * @param log A Logger object that is used for logging results.
+     * @return A list containing all the winning bots
+     */
+    private List<GeneBot> runTournament(Logger log)
     {
         // ensuring there are an even number of contestants
         if ((_contestants.size() % 2) == 1)
@@ -68,23 +85,22 @@ public class Generation {
         }
         
         // logging stats        
-        saveStats(game.getTotalLegalMoves(), game.getTotalFailedMoves(),
+        log.saveStats(game.getTotalLegalMoves(), game.getTotalFailedMoves(),
                   game.getTotalCrossWins(), game.getTotalNoughtWins(),
-                  _winners.size(), _contestants.size(), logFilePath);
+                  _winners.size(), _contestants.size());
        
         return _winners;
     }
     
-    private void runMultiRoundTournament(int rounds, String logFilePath)
+    /**
+     * Runs multiple tournaments on after the other, hence killing off a higher
+     * percentage of weak bots
+     * @param rounds The number of rounds to play
+     * @param log A Logger object, for logging stats
+     */
+    private void runMultiRoundTournament(int rounds, Logger log)
     {    
-        try
-	{
-            Files.write(Paths.get(logFilePath), "\n".getBytes(), StandardOpenOption.APPEND);
-        }    
-	catch(IOException e)
-	{
-	     e.printStackTrace();
-	}
+        log.newLine();
 
         // run multiple generations, killing the weakest
         // 50% each time
@@ -92,7 +108,7 @@ public class Generation {
         {
             System.out.println("Round: " + r);
             _winners.clear();
-            runTournament(logFilePath);
+            runTournament(log);
             _contestants.clear();
             _contestants.addAll(_winners);
  
@@ -102,6 +118,12 @@ public class Generation {
         Regenerate(rounds);      
     }
     
+    /**
+     * Deletes the entire contents of _contestants and generates new GeneBots
+     * using the bots in _winners as the parents.
+     * @param spawnRate The number of children to spawn from each pair of bots,
+     * as a power of 2
+     */
     public void Regenerate(int spawnRate)
     {
         List<GeneBot> children = new ArrayList<>();
@@ -130,90 +152,21 @@ public class Generation {
         _winners.clear();    
     }
     
-    private void saveStats(int legalMoves, int failedMoves, 
-                           int totalCrossWins, int totalNoughtWins,
-                           int totalWinners, int totalContestants,
-                           String logFilePath)
-    {      
-        System.out.println("Total legal moves: " + legalMoves);
-        System.out.println("Total failed moves: " + failedMoves);
-        double hitRate = ((double)legalMoves / ((double)failedMoves + (double)legalMoves));
-        System.out.println("Legal move rate: " + hitRate);
-        System.out.println("Total Cross wins: " + totalCrossWins);
-        System.out.println("Total Nought wins: " + totalNoughtWins);
-        System.out.println("Total number of winners: " + totalWinners);
-        System.out.println("Total number of contestants: " + totalContestants);
-        System.out.println("*************");
-        
-        // determining the string to add to the file:
-        String stats = ',' + Integer.toString(legalMoves) + ',' 
-                     + Integer.toString(failedMoves) + ','
-                     + Double.toString(hitRate) + ','
-                     + Integer.toString(totalCrossWins) + ','
-                     + Integer.toString(totalNoughtWins) + ','
-                     + Integer.toString(totalWinners) + ','
-                     + Integer.toString(totalContestants) + ',';
-        
-        // appending a .csv file with stats
-        try
-	{
-            Files.write(Paths.get(logFilePath), stats.getBytes(), StandardOpenOption.APPEND);
-        }    
-	catch(IOException e)
-	{
-	     e.printStackTrace();
-	}
-    }
-    
-    public static void createLogFile(String path, int rounds)
-    {     
-        // creating a .csv file to log results to
-        try
-	{            
-            FileWriter writer = new FileWriter(path);
-            for (int i = 0; i < rounds; i++)
-            {
-                writer.append("Round " + i);
-                writer.append(',');
-                writer.append("Total legal moves");
-                writer.append(',');
-                writer.append("Total failed moves");
-                writer.append(',');
-                writer.append("Legal move rate");	    
-                writer.append(',');
-                writer.append("Total Cross wins");
-                writer.append(',');
-                writer.append("Total Nought wins");
-                writer.append(',');
-                writer.append("Total number of winners");
-                writer.append(',');
-                writer.append("Total number of contestants");
-                writer.append(',');
-            }
-            writer.append("\n");
-            writer.flush();
-	    writer.close();
-        }    
-	catch(IOException e)
-	{
-	     e.printStackTrace();
-	}
-    }
-    
+    /**
+     * A place to play God. Create generations. Make them fight. Do evolution.
+     * @param args Unused
+     */
     public static void main(String[] args)
     {
         Generation g = new Generation(500, 0.05f);    
         int numRounds = 5;
         
-        // setting ther file path and file name for the log file
-        String logFile = new SimpleDateFormat("'C:\\Users\\Alex\\Documents\\TicTacToeBotLogs'yyyyMMddhhmmss'.csv'").format(new Date());
+        Logger log = new Logger("C:\\Users\\Alex\\Documents", numRounds);
         
-        createLogFile(logFile, numRounds);
- 
         for (int i = 0; i < 5000; i++)
         {
         System.out.println("Tournament number: " + i);
-        g.runMultiRoundTournament(numRounds, logFile);
+        g.runMultiRoundTournament(numRounds, log);
         }
 
     }

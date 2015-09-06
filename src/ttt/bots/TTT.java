@@ -7,7 +7,9 @@ package ttt.bots;
  */
 
 /**
- *
+ * Most of the logic used for the game is incoded as bitfields
+ * Some useful bitfields are saved here for reference
+ * 
  * @author Alex
  */
 public class TTT

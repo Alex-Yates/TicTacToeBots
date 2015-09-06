@@ -9,11 +9,12 @@ import java.util.Random;
 
 
 /**
- *
+ * Handles the execution of specific tic tac toe matches
  * @author Alex
  */
 public class Game {
 
+    // member variables
     private iPlayer _crossPlayer;
     private iPlayer _noughtPlayer;
     private int _crossPlayerScore = 0;
@@ -26,6 +27,7 @@ public class Game {
     private iPlayer _currentPlayer;// = _crossPlayer;
     private Random _random = new Random();
 
+    
     public int getTotalLegalMoves()
     {
         return _totalLegalMoves;
@@ -46,6 +48,9 @@ public class Game {
         return _totalNoughtWins;
     }
     
+    /**
+     * Toggles the current [player between _noughtPlayer and _crossPlayer
+     */
     private void nextPlayer() {
         if (_currentPlayer == _crossPlayer) 
         {
@@ -57,6 +62,12 @@ public class Game {
         }
     }
 
+    /**
+     * Tests if a particular int represents a legal move. For example, is the
+     * int within the correct range (0-8) and is the square free?
+     * @param square the square being tested
+     * @return true or false depending on whether square is free
+     */
     private boolean isValidMove(int square) {
         // Checking the square is between 0 and 8 
         if (square > 8 || square < 0) 
@@ -78,8 +89,9 @@ public class Game {
         return true;
     }
 
-
-    
+    /**
+     * @return true if _crossPlayer has won
+     */
     private boolean crossWin()
         {
             for (int i = 0; i < 8; i++)
@@ -96,6 +108,9 @@ public class Game {
             return false;
         }
     
+    /**
+     * @return true if _noughtPlayer has won
+     */
     private boolean noughtWin()
         {
             for (int i = 0; i < 8; i++)
@@ -112,27 +127,12 @@ public class Game {
             }
             return false;
         }
-    
-//    private boolean gameEnd() {
-//        for (int i = 0; i < 8; i++)
-//        {
-//            if ((TTT.getCrossVictory(i) & _gameState) == 0)
-//            {
-//                System.out.println("Crosses have won!");
-//                return true;
-//            }
-//        }
-//        for (int i = 0; i < 8; i++)
-//        {
-//            if ((TTT.getNoughtVictory(i) & _gameState) == 0)
-//            {
-//                System.out.println("Noughts have won!");
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
+    /**
+     * Asks a particular bot where it would like to go. If the bot responds
+     * with a legal move this is recorded
+     * @param bot A geneBot that will be asked where to move
+     */
     private void playMove(iPlayer bot) 
     {
         int square = _currentPlayer.takeTurn(_gameState);
@@ -154,6 +154,14 @@ public class Game {
         }
     }
     
+    /**
+     * The same as playMove(), except this method is used specifically
+     * for the last turn. (No score is given to the bot if they make a legal
+     * move as there should only be one move available. This reduces bias 
+     * toward the first bot to play winning as each bot will get 4 opportunities
+     * to make legal moves.)
+     * @param bot 
+     */
     private void playLastMove(iPlayer bot) 
     {
         int square = _currentPlayer.takeTurn(_gameState);
@@ -173,7 +181,12 @@ public class Game {
         }
     }
 
-
+    /**
+     * Plays a full game of tic tac toe
+     * @param crossPlayer An iPlayer (probably a GeneBot) to play as crosses
+     * @param noughtPlayer An iPlayer (probably a GeneBot) to play as noughts
+     * @return the winner (or a random player if a draw)
+     */
     public iPlayer playGame(iPlayer crossPlayer, iPlayer noughtPlayer) 
     {
         _gameState = TTT.NEWBOARD;
@@ -264,6 +277,10 @@ public class Game {
         return _random.nextBoolean() ? crossPlayer : noughtPlayer;
     }    
     
+    /**
+     * Just used for testing
+     * @param args 
+     */
     public static void main(String[] args)
     {
         Game g = new Game();

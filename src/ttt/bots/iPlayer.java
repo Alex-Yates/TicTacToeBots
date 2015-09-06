@@ -6,7 +6,8 @@
 package ttt.bots;
 
 /**
- *
+ * All classes implementing the iPlayer inteface should be able to compete
+ * at tic tac toe
  * @author Alex
  */
 public interface iPlayer {

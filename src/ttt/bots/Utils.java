@@ -12,7 +12,11 @@ package ttt.bots;
  */
 public class Utils
 {
-    
+    /**
+     * converts an int to a sting containing a binary representation of the int
+     * @param n the int to convert into binary
+     * @return a binary representation of n
+     */
     public static String toString(int n)
     {
         StringBuilder buf = new StringBuilder();
@@ -31,7 +35,11 @@ public class Utils
         return buf.toString();
     }
     
-        public static void printBoard(int input)
+    /**
+     * Prints the current state of the board to the console
+     * @param input the board to be printed
+     */
+    public static void printBoard(int input)
     {
         System.out.println(" " + TTT.getSquare(0, input) + " | " + TTT.getSquare(1, input) + " | " + TTT.getSquare(2, input));
         System.out.println("---+---+---");
@@ -41,7 +49,7 @@ public class Utils
     }
     
     /**
-     *
+     * Just used for testing
      * @param args
      */
     public static void main(String[] args)
